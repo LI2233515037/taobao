@@ -2,7 +2,8 @@
 import time
 
 from selenium import webdriver
-from __init__ import taobao,jing_dong,cookies
+from __init__ import taobao,jd_cookies,jing_dong
+
 
 
 class BrowserObject():
@@ -13,18 +14,18 @@ class BrowserObject():
     def get_driver(cls):  # 创建浏览器对象
         if cls.driver is None:
             cls.driver = webdriver.Chrome()
-            cls.driver.get(taobao)
+            cls.driver.get(jing_dong)
             cls.driver.maximize_window()
-            cls.driver.implicitly_wait(10)
+            cls.driver.implicitly_wait(5)
             cls.driver.delete_all_cookies()
-            for cookie in cookies:
+            for cookie in jd_cookies:
                 cls.driver.add_cookie(cookie)
             cls.driver.refresh()
         return cls.driver
 
     @classmethod
     def quit_driver(cls):  # 关闭浏览器对象
-        if cls.driver:
+        if cls.driver and cls.quit_status:
             cls.driver.quit()
             cls.driver = None
 
@@ -34,6 +35,8 @@ class BrowserObject():
 
 
 if __name__ == '__main__':
-    BrowserObject.get_driver()
-    time.sleep(3)
+    driver=BrowserObject.get_driver()
+    # driver.delete_all_cookies()
+    time.sleep(10)
+    # print(driver.get_cookies())
     BrowserObject.quit_driver()
